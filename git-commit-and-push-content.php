@@ -4,6 +4,16 @@ require(__DIR__ . DS . 'helpers.php');
 $gitHelper = new KirbyGitHelper();
 
 /*
+* Avatar
+*/
+kirby()->hook('panel.avatar.upload', function ($avatar) use ($gitHelper){
+    $gitHelper->kirbyChange('upload(avatar): ' . $avatar->filename());
+});
+kirby()->hook('panel.avatar.delete', function ($avatar) use ($gitHelper){
+    $gitHelper->kirbyChange('delete(avatar): ' . $avatar->filename());
+});
+
+/*
 * Pages
 */
 kirby()->hook('panel.page.create', function ($page) use ($gitHelper) {
@@ -45,6 +55,19 @@ kirby()->hook('panel.file.sort', function ($file) use ($gitHelper){
 });
 kirby()->hook('panel.file.delete', function ($file) use ($gitHelper){
     $gitHelper->kirbyChange('delete(file): ' . $file->page()->uri() . '/' . $file->filename());
+});
+
+/*
+* User
+*/
+kirby()->hook('panel.user.create', function ($user) use ($gitHelper) {
+    $gitHelper->kirbyChange('create(user): ' . $user->username());
+});
+kirby()->hook('panel.user.update', function ($user) use ($gitHelper) {
+    $gitHelper->kirbyChange('update(user): ' . $user->username());
+});
+kirby()->hook('panel.user.delete', function ($user) use ($gitHelper){
+    $gitHelper->kirbyChange('delete(user): ' . $user->username());
 });
 
 if(c::get('gcapc-cron-hooks-enabled', true)) {
